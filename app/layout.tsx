@@ -8,11 +8,13 @@ export const metadata = {
   description:
     "The Satoshi Agent is an AI Chat Bot powered by GPT, with knowledge of everything Satoshi Nakamoto.",
   image: "https://satoshiagent.com/og-image.png",
+  images: ['https://satoshiagent.com/og-image.png'],
   openGraph: {
     title: "Satoshi Agent - AI Chat Bot",
     description:
       "The Satoshi Agent is an AI Chat Bot powered by GPT, with knowledge of everything Satoshi Nakamoto.",
     image: "https://satoshiagent.com/og-image.png",
+    images: ['https://satoshiagent.com/og-image.png'],
   },
 };
 
