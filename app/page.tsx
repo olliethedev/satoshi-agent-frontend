@@ -1,113 +1,305 @@
-import Image from 'next/image'
+/* eslint-disable @next/next/no-img-element */
+"use client";
+
+import Image from "next/image";
+import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import Head from "next/head";
+
+const SATS_PRICE = 10;
+
+interface IMessage {
+  id: string;
+  role: "user" | "bot";
+  content: string;
+  loading?: boolean;
+  error?: boolean;
+}
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
+    <>
+      <Head>
+        <link rel="icon" href="favicon.png" />
+        {/* search banner */}
+        <meta name="og:image" content="https://satoshiagent.com/og-image.png" />
+      </Head>
+      <main className="flex min-h-screen flex-col items-center bg-base-100">
+        <AppNav />
+        <MessageList />
+        <MessageInput />
+      </main>
+    </>
+  );
+}
+
+const AppNav = () => {
+  return (
+    <>
+      <div className="navbar bg-base-200">
+        <div className="flex-1">
+          <a className="btn btn-ghost normal-case text-xl">
+            <div className="w-10 rounded-full overflow-hidden">
+              <img className="" src="/chat_head.png" alt="Satoshi Bot" />
+            </div>
+            Satoshi Agent
           </a>
         </div>
+        <div className="flex-none">
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <button
+                className=""
+                onClick={() => (window as any).my_modal_1.showModal()}
+              >
+                Technical
+              </button>
+            </li>
+            <li>
+              <details>
+                <summary>Social</summary>
+                <ul className="p-2 bg-base-200">
+                  <li>
+                    <a
+                      href="https://twitter.com/olliethedev"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >Twitter</a>
+                  </li>
+                  <li>
+                    <a
+                    href="https://snort.social/p/npub154hghkask9c4l9ek5ph543temlpwwdazkk2vnrgy0pnn7xh3pqhqrlx56a"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    >Nostr</a>
+                  </li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+        </div>
       </div>
+      <dialog id="my_modal_1" className="modal">
+        <form method="dialog" className="modal-box bg-base-200">
+          <h3 className="font-bold text-lg">How it all works 🤯</h3>
+          <p className="py-4">
+            TODO
+          </p>
+          <div className="modal-action">
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn">Close</button>
+          </div>
+        </form>
+      </dialog>
+    </>
+  );
+};
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+const MessageList = () => {
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  useEffect(() => {
+    let element = document.getElementById("list-end");
+    element?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [messages]);
+  return (
+    <div className="flex flex-col mx-auto grow py-8 md:px-4 px-1 overflow-scroll gap-4">
+      <IntroCard>
+        <span>
+          👋 Greetings! I am a Satoshi Nakamoto chatbot, developed by{" "}
+          <a
+            href="https://twitter.com/olliethedev"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="link link-primary inline-block"
+          >
+            @olliethedev
+          </a>
+          {". "}
+          <br />
+          I&apos;ve been trained on all of Satoshi&apos;s public statements.
+          <br /> A small fee of <b>{`${SATS_PRICE}`} </b>
+          <a
+            href="https://en.bitcoin.it/wiki/Satoshi_(unit)"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="link link-primary inline-block"
+          >
+            satoshis
+          </a>{" "}
+          per message is required for our interaction, so ensure your browser
+          extension is enabled with ⚡{" "}
+          <a
+            href="https://www.webln.guide/ressources/webln-providers"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="link link-primary inline-block"
+          >
+            WebLN
+          </a>
+          .<br />
+          Feel free to inquire about anything!
+        </span>
+        {/* horizontal divider */}
+        <div className="border-t border-gray-200 my-2" />
+        <span className="body-sm text-xs text-gray-400">
+          ⚠️ Disclaimer: Please note that responses are generated by an AI model
+          and should not be considered as professional advice.
+        </span>
+      </IntroCard>
+      {/* {messages.length === 0 && (
+        <div className="flex flex-col items-end gap-3">
+          <div className="title-sm">Try asking me one of these questions:</div>
+          {exampleQuestions.map((question, index) => (
+            <SuggestedQuestion question={question} key={index} />
+            
+          ))}
+        </div>
+      )} */}
+
+      {messages.map((message) =>
+        message.role === "user" ? (
+          <ChatUserCard key={message.id} text={message.content} />
+        ) : (
+          <ChatBotCard
+            key={message.id}
+            message={message}
+            loading={message?.loading ?? false}
+            error={message?.error ?? false}
+          />
+        )
+      )}
+      <div id="list-end" />
+    </div>
+  );
+};
+
+const ChatBotCard = ({
+  message,
+  loading,
+  error,
+}: {
+  message: IMessage;
+  loading: boolean;
+  error: boolean;
+}) => {
+  return (
+    <div className="chat chat-start">
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img src="/chat_head.png" alt="Satoshi Bot" />
+        </div>
+      </div>
+      <div className="chat-bubble">
+        {loading && (
+          //ellipsis-horizontal animated
+          <div className="flex flex-row gap-2">
+            <div>
+              <span className="sr-only">Loading...</span>
+              <EllipsisHorizontalIcon
+                className="block h-6 w-6 animate-pulse"
+                aria-hidden="true"
+              />
+            </div>
+          </div>
+        )}
+        {/* replace \n with <br/> in text value */}
+        <div className={"body-sm" + (error ? " text-red-500" : "")}>
+          {message.content && (
+            <span>
+              {/* <ReactMarkdown remarkPlugins={[remarkGfm]}
+            components={{
+              code({ node, inline, className, children, ...props }) {
+               const match = /language-(\w+)/.exec(className || '');
+               return !inline && match ? (
+                <SyntaxHighlighter
+                 style={{...atomDark, text:"white"} as any}
+                 language={match[1]}
+                 PreTag="div"
+                 {...props}
+                >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
+               ) : (
+                <span className={className} {...props}>
+                 {children}
+                </span>
+               );
+              },
+            }} >{message.content}</ReactMarkdown> */}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const IntroCard = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="chat chat-start">
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img src="/chat_head.png" alt="Satoshi Bot" />
+        </div>
+      </div>
+      <div className="chat-bubble">
+        <div className={"body-sm"}>{children}</div>
+      </div>
+    </div>
+  );
+};
+
+const ChatUserCard = ({ text }: { text: string }) => {
+  return (
+    <div className="chat chat-end">
+      <div className="chat-bubble">
+        <div className="body-sm">{text}</div>
+      </div>
+    </div>
+  );
+};
+
+const MessageInput = () => {
+  const [input, setInput] = useState("");
+  const [inputValid, setInputValid] = useState(false);
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInput(value);
+    setInputValid(value.length > 0);
+  };
+  return (
+    <div className="card flex-row bg-base-300 shadow-xl max-w-7xl w-full">
+      <form
+        className="card-body flex-row gap-4 p-2 w-full"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const message = input;
+          // saveMessage({
+          //   id: new Date().getTime(),
+          //   role: "user",
+          //   content: message,
+          // });
+          setInput("");
+          setInputValid(false);
+        }}
+      >
+        <input
+          className="input w-full grow bg-base-100"
+          type="text"
+          placeholder="Ask me anything..."
+          onChange={onInputChange}
+          value={input}
         />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          disabled={!inputValid}
+          className="btn btn-primary"
+          type="submit"
         >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+          Ask
+        </button>
+      </form>
+    </div>
+  );
+};
