@@ -1,10 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import Image from "next/image";
-import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
-import Head from "next/head";
+import { useEffect } from "react";
 import { Message } from "ai";
 import { useChat } from 'ai/react'
 
@@ -23,12 +20,6 @@ export default function Home() {
   });
   return (
     <>
-      <Head>
-        <link rel="icon" href="favicon.png" />
-        {/* search banner */}
-        <meta property="og:image" content="https://satoshiagent.com/og-image.png" />
-        <meta property="twitter:image" content="https://satoshiagent.com/og-image.png" />
-      </Head>
       <main className="flex h-screen flex-col items-center bg-base-100 pb-6">
         <AppNav />
         <MessageList messages={messages} />
