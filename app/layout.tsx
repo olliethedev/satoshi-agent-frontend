@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Satoshi Agent - AI Chat Bot',
-  description: 'The Satoshi Agent is an AI Chat Bot powered by GPT-4, crafted by @olliethedev, with knowledge of everything Satoshi Nakamoto.',
+  description: 'The Satoshi Agent is an AI Chat Bot powered by GPT, with knowledge of everything Satoshi Nakamoto.',
 }
 
 export default function RootLayout({

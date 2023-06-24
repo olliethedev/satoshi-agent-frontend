@@ -47,15 +47,7 @@ const AppNav = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-            <li>
-              <button
-                className=""
-                onClick={() => (window as any).my_modal_1.showModal()}
-              >
-                Technical
-              </button>
-            </li>
-            <li>
+          <li>
               <details>
                 <summary>Social</summary>
                 <ul className="p-2 bg-base-200">
@@ -75,6 +67,23 @@ const AppNav = () => {
                   </li>
                 </ul>
               </details>
+            </li>
+            <li>
+              <button
+                className=""
+                onClick={() => (window as any).my_modal_1.showModal()}
+              >
+                Technical
+              </button>
+            </li>        
+            <li>
+              <a
+                href="https://getalby.com/p/olliethedev"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Tip The Dev
+              </a>
             </li>
           </ul>
         </div>
