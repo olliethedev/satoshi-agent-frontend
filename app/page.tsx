@@ -26,7 +26,8 @@ export default function Home() {
       <Head>
         <link rel="icon" href="favicon.png" />
         {/* search banner */}
-        <meta name="og:image" content="https://satoshiagent.com/og-image.png" />
+        <meta property="og:image" content="https://satoshiagent.com/og-image.png" />
+        <meta property="twitter:image" content="https://satoshiagent.com/og-image.png" />
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-base-100">
         <AppNav />
