@@ -5,18 +5,22 @@ import Image from "next/image";
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import Head from "next/head";
+import { Message } from "ai";
+import { useChat } from 'ai/react'
 
 const SATS_PRICE = 10;
 
-interface IMessage {
-  id: string;
-  role: "user" | "bot";
-  content: string;
-  loading?: boolean;
-  error?: boolean;
-}
-
 export default function Home() {
+
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+      "Content-Type": "application/json",
+    },
+  });
   return (
     <>
       <Head>
@@ -26,8 +30,8 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center bg-base-100">
         <AppNav />
-        <MessageList />
-        <MessageInput />
+        <MessageList messages={messages} />
+        <MessageInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit}  />
       </main>
     </>
   );
@@ -47,7 +51,7 @@ const AppNav = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
-          <li>
+            <li>
               <details>
                 <summary>Social</summary>
                 <ul className="p-2 bg-base-200">
@@ -56,14 +60,18 @@ const AppNav = () => {
                       href="https://twitter.com/olliethedev"
                       target="_blank"
                       rel="noreferrer noopener"
-                    >Twitter</a>
+                    >
+                      Twitter
+                    </a>
                   </li>
                   <li>
                     <a
-                    href="https://snort.social/p/npub154hghkask9c4l9ek5ph543temlpwwdazkk2vnrgy0pnn7xh3pqhqrlx56a"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    >Nostr</a>
+                      href="https://snort.social/p/npub154hghkask9c4l9ek5ph543temlpwwdazkk2vnrgy0pnn7xh3pqhqrlx56a"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      Nostr
+                    </a>
                   </li>
                 </ul>
               </details>
@@ -75,7 +83,7 @@ const AppNav = () => {
               >
                 Technical
               </button>
-            </li>        
+            </li>
             <li>
               <a
                 href="https://getalby.com/p/olliethedev"
@@ -91,9 +99,7 @@ const AppNav = () => {
       <dialog id="my_modal_1" className="modal">
         <form method="dialog" className="modal-box bg-base-200">
           <h3 className="font-bold text-lg">How it all works 🤯</h3>
-          <p className="py-4">
-            TODO
-          </p>
+          <p className="py-4">TODO</p>
           <div className="modal-action">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn">Close</button>
@@ -104,8 +110,10 @@ const AppNav = () => {
   );
 };
 
-const MessageList = () => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
+const MessageList = ({messages}:{
+  messages: Message[]
+}) => {
+  
   useEffect(() => {
     let element = document.getElementById("list-end");
     element?.scrollIntoView({
@@ -115,7 +123,7 @@ const MessageList = () => {
     });
   }, [messages]);
   return (
-    <div className="flex flex-col mx-auto grow py-8 md:px-4 px-1 overflow-scroll gap-4">
+    <div className="flex flex-col mx-auto max-w-7xl grow py-8 md:px-4 px-1 overflow-scroll gap-4">
       <IntroCard>
         <span>
           👋 Greetings! I am a Satoshi Nakamoto chatbot, developed by{" "}
@@ -173,12 +181,7 @@ const MessageList = () => {
         message.role === "user" ? (
           <ChatUserCard key={message.id} text={message.content} />
         ) : (
-          <ChatBotCard
-            key={message.id}
-            message={message}
-            loading={message?.loading ?? false}
-            error={message?.error ?? false}
-          />
+          <ChatBotCard key={message.id} message={message} />
         )
       )}
       <div id="list-end" />
@@ -186,15 +189,7 @@ const MessageList = () => {
   );
 };
 
-const ChatBotCard = ({
-  message,
-  loading,
-  error,
-}: {
-  message: IMessage;
-  loading: boolean;
-  error: boolean;
-}) => {
+const ChatBotCard = ({ message }: { message: Message }) => {
   return (
     <div className="chat chat-start">
       <div className="chat-image avatar">
@@ -203,22 +198,10 @@ const ChatBotCard = ({
         </div>
       </div>
       <div className="chat-bubble">
-        {loading && (
-          //ellipsis-horizontal animated
-          <div className="flex flex-row gap-2">
-            <div>
-              <span className="sr-only">Loading...</span>
-              <EllipsisHorizontalIcon
-                className="block h-6 w-6 animate-pulse"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
-        )}
-        {/* replace \n with <br/> in text value */}
-        <div className={"body-sm" + (error ? " text-red-500" : "")}>
+        <div className="body-sm">
           {message.content && (
             <span>
+              {message.content}
               {/* <ReactMarkdown remarkPlugins={[remarkGfm]}
             components={{
               code({ node, inline, className, children, ...props }) {
@@ -263,6 +246,11 @@ const IntroCard = ({ children }: { children: React.ReactNode }) => {
 const ChatUserCard = ({ text }: { text: string }) => {
   return (
     <div className="chat chat-end">
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img src="/chat_user.png" alt="Satoshi Bot" />
+        </div>
+      </div>
       <div className="chat-bubble">
         <div className="body-sm">{text}</div>
       </div>
@@ -270,39 +258,32 @@ const ChatUserCard = ({ text }: { text: string }) => {
   );
 };
 
-const MessageInput = () => {
-  const [input, setInput] = useState("");
-  const [inputValid, setInputValid] = useState(false);
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInput(value);
-    setInputValid(value.length > 0);
-  };
+const MessageInput = ({
+  input,
+  handleInputChange,
+  handleSubmit,
+}:{
+  input: string,
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+}) => {
+  
+  
   return (
     <div className="card flex-row bg-base-300 shadow-xl max-w-7xl w-full">
       <form
         className="card-body flex-row gap-4 p-2 w-full"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const message = input;
-          // saveMessage({
-          //   id: new Date().getTime(),
-          //   role: "user",
-          //   content: message,
-          // });
-          setInput("");
-          setInputValid(false);
-        }}
+        onSubmit={handleSubmit}
       >
         <input
           className="input w-full grow bg-base-100"
           type="text"
           placeholder="Ask me anything..."
-          onChange={onInputChange}
+          onChange={handleInputChange}
           value={input}
         />
         <button
-          disabled={!inputValid}
+          disabled={input.length === 0}
           className="btn btn-primary"
           type="submit"
         >
