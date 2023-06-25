@@ -20,7 +20,7 @@ export default function Home() {
   });
   return (
     <>
-      <main className="flex h-screen flex-col items-center bg-base-100 pb-6">
+      <main className="flex h-screen flex-col items-center pb-6">
         <AppNav />
         <MessageList messages={messages} />
         <MessageInput input={input} handleInputChange={handleInputChange} handleSubmit={handleSubmit}  />
@@ -115,7 +115,7 @@ const MessageList = ({messages}:{
     });
   }, [messages]);
   return (
-    <div className="flex flex-col mx-auto max-w-7xl w-full grow py-4 md:px-4 px-1 overflow-scroll gap-4">
+    <div className="flex flex-col mx-auto max-w-5xl w-full grow py-4 md:px-4 px-1 overflow-scroll gap-4">
       <IntroCard>
         <span>
           👋 Greetings! I am a Satoshi Nakamoto chatbot, developed by{" "}
@@ -262,7 +262,7 @@ const MessageInput = ({
   
   
   return (
-    <div className="card flex-row bg-base-300 shadow-xl max-w-7xl w-full">
+    <div className="card flex-row bg-base-300 shadow-xl max-w-5xl w-full">
       <form
         className="card-body flex-row gap-4 p-2 w-full"
         onSubmit={handleSubmit}
