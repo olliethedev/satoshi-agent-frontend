@@ -38,7 +38,9 @@ const AppNav = () => {
             <div className="w-10 rounded-full overflow-hidden">
               <img className="" src="/chat_head.png" alt="Satoshi Bot" />
             </div>
+            <span className="md:block hidden">
             Satoshi Agent
+            </span>
           </a>
         </div>
         <div className="flex-none">
