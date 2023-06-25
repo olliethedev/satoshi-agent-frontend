@@ -44,7 +44,7 @@ const AppNav = () => {
           </a>
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal px-1 z-10">
             <li>
               <details>
                 <summary>Social</summary>
