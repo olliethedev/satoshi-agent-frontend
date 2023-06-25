@@ -3,19 +3,31 @@
 
 import { useEffect } from "react";
 import { Message } from "ai";
-import { useChat } from 'ai/react'
+import { toast } from "react-toastify";
+import ToastContainer  from "@/app/components/ToastContainer";
+import { useLsatChat } from "@/app/hooks/useLsatChat";
+
 
 const SATS_PRICE = 10;
 
 export default function Home() {
 
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const { messages, input, handleInputChange, handleSubmit } = useLsatChat({
     api: "/api/chat",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods" : "GET,POST,PUT,DELETE,OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
       "Content-Type": "application/json",
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(`Error connecting to server. Ensure you have WebLN enabled extension installed and try again.`);
+    },
+    onResponse: (res) => {
+      if (res.status === 402){
+        toast.error("Code: 402. Please install Lightning Network wallet browser extension to continue");
+      }
     },
   });
   return (
@@ -45,6 +57,25 @@ const AppNav = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1 z-10">
+            
+            <li>
+              <a
+                href="https://getalby.com/p/olliethedev"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                Tip The Dev
+              </a>
+            </li>
+            <li>
+              <button
+                className=""
+                onClick={() => (window as any).my_modal_1.showModal()}
+              >
+                Technical
+              </button>
+            </li>
+
             <li>
               <details>
                 <summary>Social</summary>
@@ -70,23 +101,7 @@ const AppNav = () => {
                 </ul>
               </details>
             </li>
-            <li>
-              <button
-                className=""
-                onClick={() => (window as any).my_modal_1.showModal()}
-              >
-                Technical
-              </button>
-            </li>
-            <li>
-              <a
-                href="https://getalby.com/p/olliethedev"
-                target="_blank"
-                rel="noreferrer noopener"
-              >
-                Tip The Dev
-              </a>
-            </li>
+            
           </ul>
         </div>
       </div>
@@ -100,6 +115,7 @@ const AppNav = () => {
           </div>
         </form>
       </dialog>
+      <ToastContainer />
     </>
   );
 };
