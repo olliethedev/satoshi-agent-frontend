@@ -1,3 +1,8 @@
+# Satoshi Agent Frontend
+
+This is a simple chat frontend for the Satoshi Agent project. It is built with Next.js and TypeScript. It uses [satoshi-agent-core-service](https://github.com/olliethedev/satoshi-agent-core-service) as a backend. The backend is behind a lightning paywall, so you will need to pay a small amount of sats to use the service via the chat.
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

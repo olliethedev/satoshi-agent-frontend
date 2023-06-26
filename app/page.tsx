@@ -177,15 +177,6 @@ const MessageList = ({messages}:{
           and should not be considered as professional advice.
         </span>
       </IntroCard>
-      {/* {messages.length === 0 && (
-        <div className="flex flex-col items-end gap-3">
-          <div className="title-sm">Try asking me one of these questions:</div>
-          {exampleQuestions.map((question, index) => (
-            <SuggestedQuestion question={question} key={index} />
-            
-          ))}
-        </div>
-      )} */}
 
       {messages.map((message) =>
         message.role === "user" ? (
@@ -212,24 +203,6 @@ const ChatBotCard = ({ message }: { message: Message }) => {
           {message.content && (
             <span>
               {message.content}
-              {/* <ReactMarkdown remarkPlugins={[remarkGfm]}
-            components={{
-              code({ node, inline, className, children, ...props }) {
-               const match = /language-(\w+)/.exec(className || '');
-               return !inline && match ? (
-                <SyntaxHighlighter
-                 style={{...atomDark, text:"white"} as any}
-                 language={match[1]}
-                 PreTag="div"
-                 {...props}
-                >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
-               ) : (
-                <span className={className} {...props}>
-                 {children}
-                </span>
-               );
-              },
-            }} >{message.content}</ReactMarkdown> */}
             </span>
           )}
         </div>
